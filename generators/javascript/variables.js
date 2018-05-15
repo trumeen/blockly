@@ -33,6 +33,8 @@ Blockly.JavaScript['variables_get'] = function(block) {
   // Variable getter.
   var code = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
+      console.log(code);
+      
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
