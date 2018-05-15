@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Blockly Demo: Step Execution with JS Interpreter</title>
@@ -13,37 +14,45 @@
       background-color: #fff;
       font-family: sans-serif;
     }
+
     h1 {
       font-weight: normal;
       font-size: 140%;
     }
   </style>
 </head>
+
 <body>
-  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+  <h1>
+    <a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Step Execution with JS Interpreter</h1>
 
   <p>This is a demo of executing code step-by-step with a sandboxed JavaScript interpreter.</p>
 
-  <p>The generator's <code>Blockly.JavaScript.STATEMENT_PREFIX</code> is assigned <code>'highlightBlock(%1);\n'</code>,
-  where <code>%1</code> is the block id. The call to <code>highlightBlock()</code> will highlight the identified block
-  and set the variable <code>highlightPause</code> to <code>true</code>.</p>
+  <p>The generator's
+    <code>Blockly.JavaScript.STATEMENT_PREFIX</code> is assigned
+    <code>'highlightBlock(%1);\n'</code>, where
+    <code>%1</code> is the block id. The call to
+    <code>highlightBlock()</code> will highlight the identified block and set the variable
+    <code>highlightPause</code> to
+    <code>true</code>.</p>
 
-  <p>"Parse JavaScript" will generate the code and load it into the interpreter. Then, each press of the
-  "Step JavaScript" button will run the interpreter one step until the <code>highlightPause</code> is true.
-  That is, until <code>highlightBlock()</code> has highlighted the block that will be executed on the next step.</p>
+  <p>"Parse JavaScript" will generate the code and load it into the interpreter. Then, each press of the "Step JavaScript" button
+    will run the interpreter one step until the
+    <code>highlightPause</code> is true. That is, until
+    <code>highlightBlock()</code> has highlighted the block that will be executed on the next step.</p>
 
-  <p>&rarr; <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS Interpreter</a></p>
+  <p>&rarr;
+    <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS Interpreter</a>
+  </p>
 
   <p>
     <button onclick="stepCode()" id="stepButton">Step JavaScript</button>
   </p>
 
   <div style="width: 100%">
-    <div id="blocklyDiv"
-        style="display: inline-block; height: 480px; width: 58%"></div>
-    <textarea id="output" disabled="disabled"
-        style="display: inline-block; height: 480px; width: 38%;">
+    <div id="blocklyDiv" style="display: inline-block; height: 480px; width: 58%"></div>
+    <textarea id="output" disabled="disabled" style="display: inline-block; height: 480px; width: 38%;">
     </textarea>
   </div>
 
@@ -137,10 +146,12 @@
 
   <script>
     var demoWorkspace = Blockly.inject('blocklyDiv',
-        {media: '../../media/',
-         toolbox: document.getElementById('toolbox')});
+      {
+        media: '../../media/',
+        toolbox: document.getElementById('toolbox')
+      });
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
-                               demoWorkspace);
+      demoWorkspace);
 
     var outputArea = document.getElementById('output');
     var stepButton = document.getElementById('stepButton');
@@ -149,26 +160,26 @@
     function initApi(interpreter, scope) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
       interpreter.setProperty(scope, 'alert',
-          interpreter.createNativeFunction(function(text) {
-        text = text ? text.toString() : '';
-        outputArea.value += '\n' + text;
-      }));
+        interpreter.createNativeFunction(function (text) {
+          text = text ? text.toString() : '';
+          outputArea.value += '\n' + text;
+        }));
 
       // Add an API function for the prompt() block.
-      var wrapper = function(text) {
+      var wrapper = function (text) {
         text = text ? text.toString() : '';
         return interpreter.createPrimitive(prompt(text));
       };
       interpreter.setProperty(scope, 'prompt',
-          interpreter.createNativeFunction(wrapper));
+        interpreter.createNativeFunction(wrapper));
 
       // Add an API function for highlighting blocks.
-      var wrapper = function(id) {
+      var wrapper = function (id) {
         id = id ? id.toString() : '';
         return interpreter.createPrimitive(highlightBlock(id));
       };
       interpreter.setProperty(scope, 'highlightBlock',
-          interpreter.createNativeFunction(wrapper));
+        interpreter.createNativeFunction(wrapper));
     }
 
     var highlightPause = false;
@@ -205,7 +216,7 @@
 
         // And then show generated code in an alert.
         // In a timeout to allow the outputArea.value to reset first.
-        setTimeout(function() {
+        setTimeout(function () {
           alert('Ready to execute the following code\n' +
             '===================================\n' + latestCode);
           highlightPause = true;
@@ -213,6 +224,7 @@
         }, 1);
         return;
       }
+      console.log(latestCode);
       highlightPause = false;
       do {
         try {
@@ -227,7 +239,7 @@
 
             // Cool down, to discourage accidentally restarting the program.
             stepButton.disabled = 'disabled';
-            setTimeout(function() {
+            setTimeout(function () {
               stepButton.disabled = '';
             }, 2000);
 
@@ -241,7 +253,7 @@
 
     // Load the interpreter now, and upon future changes.
     generateCodeAndLoadIntoInterpreter();
-    demoWorkspace.addChangeListener(function(event) {
+    demoWorkspace.addChangeListener(function (event) {
       if (!(event instanceof Blockly.Events.Ui)) {
         // Something changed. Parser needs to be reloaded.
         generateCodeAndLoadIntoInterpreter();
@@ -249,4 +261,5 @@
     });
   </script>
 </body>
+
 </html>
